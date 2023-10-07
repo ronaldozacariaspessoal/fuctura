@@ -2,6 +2,7 @@ package dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -84,8 +85,28 @@ public class ContaDAOImpl implements ContaDAO{
 
 	@Override
 	public Conta pesquisar(int numero) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn  = conexao.getConnetion();
+		Conta conta = new Conta();
+		
+		String sql = "SELECT * FROM CONTA WHERE NUMERO  = ?";
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, numero);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				conta.setNumero(rs.getInt("NUMERO"));
+				conta.setSaldo(rs.getDouble("SALDO"));
+				conta.setLimite(rs.getDouble("LIMITE"));
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Erro ao pesquisar" + e.getMessage());
+		} finally {
+			conexao.fecharConexao(conn);
+		}
+		return conta;
 	}
 
 	@Override
