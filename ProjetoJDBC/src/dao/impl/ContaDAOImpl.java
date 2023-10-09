@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.ContaDAO;
@@ -111,8 +112,30 @@ public class ContaDAOImpl implements ContaDAO{
 
 	@Override
 	public List<Conta> listarTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = conexao.getConnetion();
+		List<Conta> retorno = new ArrayList<Conta>();
+		
+		String sql = "SELECT * FROM CONTA";
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				Conta conta = new Conta();
+				conta.setNumero(rs.getInt("NUMERO"));
+				conta.setSaldo(rs.getDouble("SALDO"));
+				conta.setLimite(rs.getDouble("LIMITE"));
+				retorno.add(conta);
+			}
+			
+		} catch (Exception e) {
+			System.out.print("Erro ao pesquisar Conta" + e.getMessage());
+		} finally {
+			conexao.fecharConexao(conn);
+		}
+		
+		return retorno;
 	}
 	
 

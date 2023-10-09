@@ -37,7 +37,14 @@ public class Conta {
 	public void setLimite(Double limite) {
 		this.limite = limite;
 	}
+
 	
+	@Override
+	public String toString() {
+		return "Conta [numero=" + numero + ", " + (saldo != null ? "saldo=" + saldo + ", " : "")
+				+ (limite != null ? "limite=" + limite : "") + "]";
+	}
+
 	
 	
 	
