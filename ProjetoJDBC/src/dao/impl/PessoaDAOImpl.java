@@ -2,6 +2,7 @@ package dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class PessoaDAOImpl implements PessoaDAO{
 	public void salvar(Pessoa pessoa) {
 		Connection conn = conexao.getConnetion();
 		
-		String sql  = "INSERT INTO PESSOA(NOME, CPF, SEXO, IDADE, ID_ENDERECO, NUMERO_CONTA)"
-				+"VALUES(?, ?, ?, ?, ?, ?)";
+		String sql  = "INSERT INTO PESSOA(NOME, CPF, SEXO, IDADE, ID_ENDERECO, NUMERO_CONTA) "
+				+ "VALUES(?, ?, ?, ?, ?, ?)";
 		
 		try {
 			Integer id = this.enderecoDAO.salvar(pessoa.getEndereco());
@@ -35,10 +36,10 @@ public class PessoaDAOImpl implements PessoaDAO{
 			ps.setInt(5, id);
 			ps.setInt(6, pessoa.getConta().getNumero());
 			ps.execute();
-			System.out.println("Inserido com sucesso");
+			System.out.println("Pessoa inserida com sucesso");
 			
 		} catch (SQLException e) {
-			System.out.println("Erro ao inserir no banco" + e.getMessage());
+			System.out.println("Erro ao inserir pessoa no banco" + e.getMessage());
 		}finally {
 			conexao.fecharConexao(conn);
 		}
@@ -53,14 +54,53 @@ public class PessoaDAOImpl implements PessoaDAO{
 
 	@Override
 	public void remover(String cpf) {
-		// TODO Auto-generated method stub
+		Connection conn = conexao.getConnetion();
+		Pessoa p = pesquisar(cpf);
 		
+		String sql = "DELETE FROM PESSOA WHERE CPF = ?";
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, cpf);
+			ps.execute();
+			System.out.println("Pessoa deletada com sucesso");
+			contaDAO.remover(p.getConta().getNumero());
+			enderecoDAO.remover(p.getEndereco().getId_endereco());
+			
+			
+		} catch (Exception e) {
+			System.out.println("Erro ao deletar pessoa" + e.getMessage());
+		}finally {
+			conexao.fecharConexao(conn);
+		}
 	}
 
 	@Override
 	public Pessoa pesquisar(String cpf) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = conexao.getConnetion();
+		Pessoa pessoa = new Pessoa();
+		String sql = "SELECT * FROM PESSOA WHERE CPF = ?";
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, cpf);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				pessoa.setNome(rs.getString("NOME"));
+				pessoa.setCpf(rs.getString("CPF"));
+				pessoa.setSexo(rs.getString("SEXO"));
+				pessoa.setIdade(rs.getInt("IDADE"));
+				pessoa.setEndereco(this.enderecoDAO.pesquisar(rs.getInt("ID_ENDERECO")));
+				pessoa.setConta(this.contaDAO.pesquisar(rs.getInt("NUMERO_CONTA")));
+				
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Erro ao pesquisar Pessoa" + e.getMessage());
+		}
+
+		return pessoa;
 	}
 
 	@Override

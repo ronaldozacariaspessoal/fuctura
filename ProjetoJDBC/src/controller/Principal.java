@@ -18,7 +18,7 @@ public class Principal {
 		
 		
 //		Conta conta  = new Conta();
-//		conta.setNumero(1016);
+//		conta.setNumero(1001);
 //		conta.setSaldo(4800d);
 //		conta.setLimite(80000d);
 //		
@@ -27,7 +27,7 @@ public class Principal {
 //		conta.setSaldo(58000d);
 //		conta.setLimite(700000d);
 //		contaDao.alterar(conta);
-//		//contaDao.remover(1001);
+//		contaDao.remover(1001);
 //		
 //		Endereco endereco = new Endereco();
 //		endereco.setRua("Rua Z");
@@ -58,28 +58,29 @@ public class Principal {
 //		listaConta.forEach(System.out::println);
 //		listaConta.forEach(c -> System.out.println(c));
 //		System.out.println("-------------------------------------------------");
-		
-		PessoaDAO pessoaDAO = new PessoaDAOImpl();
+//		
+ 		PessoaDAO pessoaDAO = new PessoaDAOImpl();
 		
 		Pessoa pessoa = new Pessoa();
-		pessoa.setCpf("01392031310");
-		pessoa.setIdade(55);
-		pessoa.setNome("Maria da Silva");
-		pessoa.setSexo("F");
+		pessoa.setCpf("07392031315");
+		pessoa.setIdade(40);
+		pessoa.setNome("Jose Pereira");
+		pessoa.setSexo("M");
 		
 		Conta contaPessoa = new Conta();
-		contaPessoa.setNumero(1025);
-		contaPessoa.setSaldo(5000d);
-		contaPessoa.setLimite(10000d);
+		contaPessoa.setNumero(1029);
+		contaPessoa.setSaldo(35000d);
+		contaPessoa.setLimite(70000d);
 		
 		Endereco enderecoPessoa = new Endereco();
-		enderecoPessoa.setComplemento("Apt");
-		enderecoPessoa.setNumero(39);
-		enderecoPessoa.setRua("Rua Doze");
+		enderecoPessoa.setComplemento("Casa");
+		enderecoPessoa.setNumero(25);
+		enderecoPessoa.setRua("Rua Vinte");
 		
 		pessoa.setConta(contaPessoa);
 		pessoa.setEndereco(enderecoPessoa);
 		pessoaDAO.salvar(pessoa);
+		//pessoaDAO.remover("11392031318");
 		
 		
 		

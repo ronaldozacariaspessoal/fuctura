@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.List;
 
 import dao.EnderecoDAO;
+import model.Conta;
 import model.Endereco;
 import model.util.Conexao;
 
@@ -94,8 +95,29 @@ public class EnderecoDAOImpl implements EnderecoDAO{
 
 	@Override
 	public Endereco pesquisar(int numero) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn  = conexao.getConnetion();
+		Endereco endereco = new Endereco();
+		
+		String sql = "SELECT * FROM ENDERECO WHERE ID_ENDERECO  = ?";
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, numero);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				endereco.setId_endereco(rs.getInt("ID_ENDERECO"));
+				endereco.setRua(rs.getString("RUA"));
+				endereco.setNumero(rs.getInt("NUMERO"));
+				endereco.setComplemento(rs.getString("COMPLEMENTO"));
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Erro ao pesquisar" + e.getMessage());
+		} finally {
+			conexao.fecharConexao(conn);
+		}
+		return endereco;
 	}
 
 	@Override
